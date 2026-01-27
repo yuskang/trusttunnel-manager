@@ -16,7 +16,7 @@
 ## 快速安裝
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/trusttunnel-manager/main/trusttunnel-manager.sh -o trusttunnel-manager.sh
+curl -fsSL https://raw.githubusercontent.com/yuskang/trusttunnel-manager/main/trusttunnel-manager.sh -o trusttunnel-manager.sh
 chmod +x trusttunnel-manager.sh
 sudo ./trusttunnel-manager.sh
 ```
