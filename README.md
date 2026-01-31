@@ -1,93 +1,167 @@
 # TrustTunnel Manager
 
-一鍵管理腳本，用於安裝、配置和管理 [TrustTunnel](https://github.com/TrustTunnel/TrustTunnel) VPN 協定。
+[![CI](https://github.com/yuskang/trusttunnel-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/yuskang/trusttunnel-manager/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/yuskang/trusttunnel-manager/releases/tag/v1.0.0)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Shell](https://img.shields.io/badge/shell-bash-orange.svg)](https://www.gnu.org/software/bash/)
 
-## 功能
+[繁體中文](README.zh-TW.md) | English
 
-| 功能 | 說明 |
-|------|------|
-| **安裝** | Endpoint (伺服器端) / Client (客戶端) / 指定版本 |
-| **調閱配置** | 查看 vpn.toml、hosts.toml、trusttunnel_client.toml |
-| **修改配置** | 配置精靈 / 手動編輯（自動備份）/ 匯出 Client 配置 |
-| **移除安裝** | 完整移除，可選備份配置 |
-| **狀態檢查** | 安裝狀態、服務狀態、配置文件、網路、進程 |
-| **服務控制** | 啟動/停止/重啟/開機自啟 (Linux systemd) |
+One-click management script for installing, configuring, and managing [TrustTunnel](https://github.com/TrustTunnel/TrustTunnel) VPN protocol.
 
-## 快速安裝
+## Features
+
+| Feature | Description |
+|---------|-------------|
+| **Install** | Endpoint (server) / Client / Specific version |
+| **View Config** | View vpn.toml, hosts.toml, trusttunnel_client.toml |
+| **Edit Config** | Setup wizard / Manual edit (auto-backup) / Export client config |
+| **Uninstall** | Complete removal with optional config backup |
+| **Status Check** | Installation status, service status, config files, network, processes |
+| **Service Control** | Start/Stop/Restart/Enable on boot (Linux systemd) |
+
+## Quick Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/yuskang/trusttunnel-manager/main/trusttunnel-manager.sh -o trusttunnel-manager.sh
+curl -fsSL https://raw.githubusercontent.com/yuskang/trusttunnel-manager/main/dist/trusttunnel-manager.sh -o trusttunnel-manager.sh
 chmod +x trusttunnel-manager.sh
 sudo ./trusttunnel-manager.sh
 ```
 
-## 使用方式
+## Usage
 
-### 互動式選單
+### Interactive Menu
 
 ```bash
 sudo ./trusttunnel-manager.sh
 ```
 
-### 命令行參數
+### Command Line Arguments
 
 ```bash
-# 安裝
+# Install
 sudo ./trusttunnel-manager.sh --install-endpoint
 sudo ./trusttunnel-manager.sh --install-client
 
-# 狀態與配置
+# Status & Config
 sudo ./trusttunnel-manager.sh --status
 sudo ./trusttunnel-manager.sh --view-config
 
-# 服務控制
+# Service Control
 sudo ./trusttunnel-manager.sh --start
 sudo ./trusttunnel-manager.sh --stop
 sudo ./trusttunnel-manager.sh --restart
 
-# 移除
+# Uninstall
 sudo ./trusttunnel-manager.sh --uninstall-endpoint
 sudo ./trusttunnel-manager.sh --uninstall-client
 
-# 幫助
+# Help
 ./trusttunnel-manager.sh --help
 ```
 
-## 系統需求
+## System Requirements
 
-- **作業系統**: Linux (推薦) / macOS
-- **權限**: root (sudo)
-- **依賴**: curl, systemd (Linux)
+- **OS**: Linux (recommended) / macOS
+- **Permissions**: root (sudo)
+- **Dependencies**: curl, systemd (Linux)
 
-## 目錄結構
+## Directory Structure
 
-安裝後的檔案位置：
+Installed file locations:
 
 ```
-/opt/trusttunnel/              # Endpoint 安裝目錄
-├── trusttunnel_endpoint       # 主程式
-├── setup_wizard               # 配置精靈
-├── vpn.toml                   # VPN 配置
-├── hosts.toml                 # TLS 主機配置
+/opt/trusttunnel/              # Endpoint installation directory
+├── trusttunnel_endpoint       # Main binary
+├── setup_wizard               # Configuration wizard
+├── vpn.toml                   # VPN configuration
+├── hosts.toml                 # TLS host configuration
 └── trusttunnel.service.template
 
-/opt/trusttunnel_client/       # Client 安裝目錄
-├── trusttunnel_client         # 主程式
-├── setup_wizard               # 配置精靈
-└── trusttunnel_client.toml    # 客戶端配置
+/opt/trusttunnel_client/       # Client installation directory
+├── trusttunnel_client         # Main binary
+├── setup_wizard               # Configuration wizard
+└── trusttunnel_client.toml    # Client configuration
 ```
 
-## 關於 TrustTunnel
+## About TrustTunnel
 
-TrustTunnel 是一個現代化的開源 VPN 協定，特點：
+TrustTunnel is a modern open-source VPN protocol featuring:
 
-- 流量偽裝成普通 HTTPS 流量，難以被偵測和封鎖
-- 支援 HTTP/1.1、HTTP/2、QUIC 協定
-- 可隧道 TCP、UDP、ICMP 流量
-- 支援分流 (Split Tunneling) 和自訂 DNS
+- Traffic disguised as regular HTTPS traffic, difficult to detect and block
+- Supports HTTP/1.1, HTTP/2, QUIC protocols
+- Can tunnel TCP, UDP, ICMP traffic
+- Supports split tunneling and custom DNS
 
-更多資訊：[TrustTunnel GitHub](https://github.com/TrustTunnel/TrustTunnel)
+More info: [TrustTunnel GitHub](https://github.com/TrustTunnel/TrustTunnel)
 
-## 授權
+## Development
+
+### Prerequisites
+
+- [ShellCheck](https://github.com/koalaman/shellcheck) - Shell script static analysis
+- [BATS](https://github.com/bats-core/bats-core) - Bash Automated Testing System
+
+### Install Development Dependencies
+
+```bash
+# macOS
+brew install shellcheck bats-core
+
+# Ubuntu/Debian
+sudo apt-get install shellcheck bats
+```
+
+### Development Commands
+
+```bash
+# Run linting
+make lint
+
+# Run tests
+make test
+
+# Build single-file distribution
+make build
+
+# Run all checks (lint + test + build)
+make all
+
+# Clean build artifacts
+make clean
+
+# Verify built script
+make verify
+```
+
+### Project Structure
+
+```
+trusttunnel-manager/
+├── trusttunnel-manager.sh    # Main entry script
+├── lib/                      # Modular function library
+│   ├── common.sh             # Constants, colors, utilities
+│   ├── install.sh            # Installation functions
+│   ├── config.sh             # Configuration management
+│   ├── status.sh             # Status checking
+│   ├── service.sh            # Service control
+│   └── uninstall.sh          # Uninstallation
+├── tests/                    # BATS tests
+├── scripts/                  # Build scripts
+├── dist/                     # Build output
+└── Makefile                  # Automation commands
+```
+
+### Contributing
+
+1. Fork this repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run tests (`make all`)
+5. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+## License
 
 MIT License
