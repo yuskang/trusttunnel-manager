@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: ShellCheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: sudo apt-get install -y shellcheck
+
+      - name: Run ShellCheck
+        run: |
+          shellcheck -x trusttunnel-manager.sh lib/*.sh
+
+  test:
+    name: BATS Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install BATS
+        run: |
+          sudo apt-get install -y bats
+
+      - name: Run Tests
+        run: |
+          bats tests/*.bats
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Package
+        run: |
+          chmod +x scripts/build.sh
+          ./scripts/build.sh
+
+      - name: Verify Build
+        run: |
+          shellcheck dist/trusttunnel-manager.sh
+          chmod +x dist/trusttunnel-manager.sh
+          dist/trusttunnel-manager.sh --help
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: trusttunnel-manager
+          path: dist/trusttunnel-manager.sh
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Release
+        run: ./scripts/build.sh
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/trusttunnel-manager.sh
+          generate_release_notes: true

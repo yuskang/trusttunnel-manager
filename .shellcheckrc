@@ -1,0 +1,15 @@
+# ShellCheck configuration for TrustTunnel Manager
+# https://github.com/koalaman/shellcheck/wiki/Directive
+
+# 允許 source 相對路徑
+external-sources=true
+
+# 預設 shell
+shell=bash
+
+# 忽略的規則
+# SC2034: 變數看似未使用 (某些變數供其他模組使用)
+# SC1091: 無法跟隨 source 的檔案
+# SC2162: read without -r (互動式輸入不需要處理反斜線)
+# SC2181: 使用 $? 檢查退出碼 (程式碼可讀性考量)
+disable=SC2034,SC1091,SC2162,SC2181
